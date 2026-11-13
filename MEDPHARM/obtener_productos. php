@@ -1,0 +1,28 @@
+<?php
+include 'conexion.php';
+
+$sql = "SELECT 
+            p.IDPRODUCTO AS id,
+            p.NOMBRE_PRODUCTO AS nombre,
+            p.DESCRIPCION AS descripcion,
+            p.STOCK_ACTUAL AS stock,
+            p.STOCK_MINIMO AS stock_minimo,
+            p.PRECIO_COMPRA AS precio_compra,
+            p.PRECIO_VENTA AS precio_venta,
+            l.LOTE AS lote,
+            l.FECHA_VENCIMIENTO AS fecha_vencimiento,
+            prov.NOMBRE AS proveedor
+        FROM producto p
+        LEFT JOIN lote l ON p.IDPRODUCTO = l.PRODUCTO_IDPRODUCTO
+        LEFT JOIN proveedor prov ON p.PROVEEDOR_IDPROVEEDOR = prov.IDPROVEEDOR";
+
+$resultado = mysqli_query($conexion, $sql);
+$productos = [];
+
+while ($fila = mysqli_fetch_assoc($resultado)) {
+    $productos[] = $fila;
+}
+
+echo json_encode($productos);
+mysqli_close($conexion);
+?>
